@@ -5,6 +5,12 @@ from django.views.generic import DetailView
 from .models import FeatureRequest
 from .forms import BugReportForm, FeatureRequestForm
 from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import BugReport, FeatureRequest
+from .forms import BugReportForm, FeatureRequestForm
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 def index(request):
@@ -74,3 +80,65 @@ def add_feature_request(request):
     else:
         form = FeatureRequestForm()
     return render(request, 'quality_control/feature_request_form.html', {'form': form})
+
+# Список всех BugReports
+def bug_report_list(request):
+    bugs = BugReport.objects.all()
+    return render(request, 'quality_control/bug_list.html', {'bugs': bugs})
+
+# Создание BugReport
+def bug_report_create(request):
+    if request.method == 'POST':
+        form = BugReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('quality_control:bug_report_list')
+    else:
+        form = BugReportForm()
+    return render(request, 'quality_control/bug_form.html', {'form': form})
+
+# Обновление BugReport
+def bug_report_update(request, pk):
+    bug = get_object_or_404(BugReport, pk=pk)
+    if request.method == 'POST':
+        form = BugReportForm(request.POST, instance=bug)
+        if form.is_valid():
+            form.save()
+            return redirect('quality_control:bug_report_list')
+    else:
+        form = BugReportForm(instance=bug)
+    return render(request, 'quality_control/bug_form.html', {'form': form})
+
+# Удаление BugReport
+def bug_report_delete(request, pk):
+    bug = get_object_or_404(BugReport, pk=pk)
+    if request.method == 'POST':
+        bug.delete()
+        return redirect('quality_control:bug_report_list')
+    return render(request, 'quality_control/bug_confirm_delete.html', {'bug': bug})
+
+# Список и детали для BugReport и FeatureRequest
+class BugReportListView(ListView):
+    model = BugReport
+    template_name = 'quality_control/bug_list.html'
+
+class BugReportDetailView(DetailView):
+    model = BugReport
+    template_name = 'quality_control/bug_detail.html'
+
+class BugReportCreateView(CreateView):
+    model = BugReport
+    form_class = BugReportForm
+    template_name = 'quality_control/bug_form.html'
+    success_url = reverse_lazy('quality_control:bug_report_list')
+
+class BugReportUpdateView(UpdateView):
+    model = BugReport
+    form_class = BugReportForm
+    template_name = 'quality_control/bug_form.html'
+    success_url = reverse_lazy('quality_control:bug_report_list')
+
+class BugReportDeleteView(DeleteView):
+    model = BugReport
+    template_name = 'quality_control/bug_confirm_delete.html'
+    success_url = reverse_lazy('quality_control:bug_report_list')

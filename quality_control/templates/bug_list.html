@@ -1,12 +1,16 @@
-{% extends 'quality_control/base.html' %}
-
-{% block title %}Bug Reports - Quality Control{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
 <h1>Bug Reports</h1>
+<a href="{% url 'quality_control:bug_report_add' %}">Create New Bug Report</a>
 <ul>
-    {% for bug in bugs %}
-    <li><a href="{% url 'quality_control:bug_detail' bug.id %}">{{ bug.title }}</a></li>
+    {% for bug in object_list %}
+        <li>
+            {{ bug.title }} - {{ bug.status }}
+            <a href="{% url 'quality_control:bug_report_detail' bug.id %}">View</a>
+            <a href="{% url 'quality_control:bug_report_update' bug.id %}">Edit</a>
+            <a href="{% url 'quality_control:bug_report_delete' bug.id %}">Delete</a>
+        </li>
     {% endfor %}
 </ul>
 {% endblock %}
