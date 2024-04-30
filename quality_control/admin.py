@@ -10,7 +10,7 @@ class BugReportAdmin(admin.ModelAdmin):
     search_fields = ['title', 'description']
     actions = [set_status_new]  # Добавление пользовательского действия
 
-    # Настройка формы редактирования
+    # Настройка формы редактировния
     fieldsets = (
         (None, {'fields': ('title', 'description')}),
         ('Advanced options', {
@@ -24,7 +24,6 @@ class FeatureRequestAdmin(admin.ModelAdmin):
     list_filter = ['status', 'priority']
     search_fields = ['title', 'description']
 
-    # Настройка формы редактирования
     fieldsets = (
         (None, {'fields': ('title', 'description')}),
         ('Advanced options', {
@@ -33,6 +32,5 @@ class FeatureRequestAdmin(admin.ModelAdmin):
         }),
     )
 
-# Регистрация моделей
 admin.site.register(BugReport, BugReportAdmin)
 admin.site.register(FeatureRequest, FeatureRequestAdmin)

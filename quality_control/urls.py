@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import index, IndexView, bug_list, BugDetailView, feature_list, FeatureDetailView
+
 
 app_name = 'quality_control'
 
@@ -9,4 +11,10 @@ urlpatterns = [
     path('features/', views.feature_list, name='feature_list'),
     path('bugs/<int:bug_id>/', views.bug_detail, name='bug_detail'),
     path('features/<int:feature_id>/', views.feature_detail, name='feature_detail'),
+    path('', index, name='index'),
+    path('index_view/', IndexView.as_view(), name='index_view'),
+    path('bugs/', bug_list, name='bug_list'),
+    path('bugs/<int:pk>/', BugDetailView.as_view(), name='bug_detail'),
+    path('features/', feature_list, name='feature_list'),
+    path('features/<int:pk>/', FeatureDetailView.as_view(), name='feature_detail'),
 ]
