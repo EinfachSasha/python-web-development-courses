@@ -1,0 +1,12 @@
+{% extends 'quality_control/base.html' %}
+
+{% block title %}Feature Requests - Quality Control{% endblock %}
+
+{% block content %}
+<h1>Feature Requests</h1>
+<ul>
+    {% for feature in features %}
+    <li><a href="{% url 'quality_control:feature_detail' feature.id %}">{{ feature.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
